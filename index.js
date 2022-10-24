@@ -62,8 +62,8 @@ let player = {
 	next: undefined,
 };
 
-let score = 0;
-if (!localStorage.getItem("High Score")) localStorage.setItem("High Score", "0");
+if (!localStorage.getItem("Score")) localStorage.setItem("Score", "0");
+else localStorage.setItem("Score", localStorage.getItem("Score") - 1);
 let target = new Hex(1, 0);
 
 let Cell = {Floor: {}, Wall: {}, Lava: {}, Ice: {}, Target: {}};
@@ -121,10 +121,10 @@ let update = dt => {
 				let next = player.next.add(player.next.sub(player.pos));
 				player.pos = player.next;
 				player.next = undefined;
-				score++;
-				if (score > Number(localStorage.getItem("High Score")))
-					localStorage.setItem("High Score", String(score));
-
+				
+				let score = localStorage.getItem("Score") + 1;
+				localStorage.setItem("Score", score);
+				
 				target = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]]
 					.map(([q, r]) => new Hex(q, r).mul(score).add(player.pos))
 					[Math.floor(Math.random() * 6)];
@@ -191,15 +191,10 @@ let render = () => {
 	context.textBaseline = "top";
 	context.lineWidth = 1;
 	context.fillStyle = "#111";
+	let score = localStorage.getItem("Score");
 	context.fillText("Score: " + score, 10, 10);
 	context.strokeStyle = "#EEE";
 	context.strokeText("Score: " + score, 10, 10);
-	let highScore = localStorage.getItem("High Score");
-	let {width} = context.measureText("High Score: " + highScore);
-	context.fillStyle = "#111";
-	context.fillText("High Score: " + highScore, w - width - 10, 10);
-	context.strokeStyle = "#EEE";
-	context.strokeText("High Score: " + highScore, w - width - 10, 10);
 	context.restore();
 };
 
