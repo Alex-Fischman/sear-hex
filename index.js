@@ -64,7 +64,11 @@ let player = {
 
 if (!localStorage.getItem("Score")) localStorage.setItem("Score", "0");
 else localStorage.setItem("Score", String(Number(localStorage.getItem("Score")) - 1));
-let target = new Hex(1, 0);
+
+
+let target = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]]
+	.map(([q, r]) => new Hex(q, r).mul(Number(localStorage.getItem("Score"))).add(player.pos))
+	[Math.floor(Math.random() * 6)];
 
 let Cell = {Floor: {}, Wall: {}, Lava: {}, Ice: {}, Target: {}};
 let cells = new Map();
@@ -74,7 +78,7 @@ let key = hex => {
 	return cantorPairingFunction(removeSign(hex.q), removeSign(hex.r));
 };
 cells.set(key(new Hex(0, 0)), Cell.Floor);
-cells.set(key(new Hex(1, 0)), Cell.Target);
+cells.set(key(target), Cell.Target);
 let cell = hex => {
 	if (cells.has(key(hex))) return cells.get(key(hex));
 	let cs = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]]
