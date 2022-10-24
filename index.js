@@ -63,7 +63,7 @@ let player = {
 };
 
 if (!localStorage.getItem("Score")) localStorage.setItem("Score", "0");
-else localStorage.setItem("Score", localStorage.getItem("Score") - 1);
+else localStorage.setItem("Score", String(Number(localStorage.getItem("Score")) - 1));
 let target = new Hex(1, 0);
 
 let Cell = {Floor: {}, Wall: {}, Lava: {}, Ice: {}, Target: {}};
@@ -122,8 +122,8 @@ let update = dt => {
 				player.pos = player.next;
 				player.next = undefined;
 				
-				let score = localStorage.getItem("Score") + 1;
-				localStorage.setItem("Score", score);
+				let score = Number(localStorage.getItem("Score")) + 1;
+				localStorage.setItem("Score", String(score));
 				
 				target = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]]
 					.map(([q, r]) => new Hex(q, r).mul(score).add(player.pos))
@@ -191,10 +191,9 @@ let render = () => {
 	context.textBaseline = "top";
 	context.lineWidth = 1;
 	context.fillStyle = "#111";
-	let score = localStorage.getItem("Score");
-	context.fillText("Score: " + score, 10, 10);
+	context.fillText("Score: " + localStorage.getItem("Score"), 10, 10);
 	context.strokeStyle = "#EEE";
-	context.strokeText("Score: " + score, 10, 10);
+	context.strokeText("Score: " + localStorage.getItem("Score"), 10, 10);
 	context.restore();
 };
 
